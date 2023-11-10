@@ -4,12 +4,12 @@ const app = express();
 const route = require("../ex-chapter6-backend-media-handling/route/routes");
 const port = process.env.PORT || 3000;
 
-app.use("/images", express.static("public/images"));
+app.use("/images", express.static("media/images"));
 app.use("/files", express.static("public/files"));
 
 app.use("/", route);
 
 
 app.listen(port, () => {
-  console.log(`check already live and well on port ${port}`)
+  console.log(`service running on port ${port}`)
 })
