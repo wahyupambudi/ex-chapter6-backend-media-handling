@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const {
   MediaProcessingImage,
+  MediaProcessingImages,
   MediaProcessingVideo,
   MediaProcessingFile,
   generateQr,
@@ -10,9 +11,10 @@ const {
 const storage = require("../lib/multer");
 const multer = require("multer")();
 
-router.post("/images", multer.single("images"), imageKitUpload);
+// router.post("/images", multer.single("images"), imageKitUpload);
 
-// router.post("/images", storage.Image.single("images"), MediaProcessingImage);
+router.post("/image-single", storage.Image.single("images"), MediaProcessingImage);
+router.post("/images", storage.Image.array("images", 3), MediaProcessingImages);
 router.post("/videos", storage.Video.single("videos"), MediaProcessingVideo);
 router.post("/files", storage.File.single("f iles"), MediaProcessingFile);
 router.post("/qr-code", generateQr);

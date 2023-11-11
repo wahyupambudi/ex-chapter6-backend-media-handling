@@ -15,6 +15,28 @@ function MediaProcessingImage(req, res) {
   return;
 }
 
+function MediaProcessingImages(req, res) {
+  let respArray = [];
+
+  for (let index = 0; index < req.files.length; index++) {
+    const filename = req.files[index].filename;
+    console.log(filename);
+
+    const imageUrl = `${req.protocol}://${req.get("host")}/images/${filename}`;
+    respArray.push(imageUrl);
+
+    console.log(imageUrl);
+  }
+
+  res.status(200).json({
+    data: respArray,
+    message: "success",
+    status: 200,
+    error: null,
+  });
+  return;
+}
+
 function MediaProcessingVideo(req, res) {
   const videoUrl = `${req.protocol}://${req.get("host")}/videos/${
     req.file.filename
@@ -97,8 +119,9 @@ async function imageKitUpload(req, res) {
 
 module.exports = {
   MediaProcessingImage,
+  MediaProcessingImages,
   MediaProcessingVideo,
   MediaProcessingFile,
   generateQr,
-  imageKitUpload
+  imageKitUpload,
 };
