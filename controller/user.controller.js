@@ -20,12 +20,12 @@ function MediaProcessingImages(req, res) {
 
   for (let index = 0; index < req.files.length; index++) {
     const filename = req.files[index].filename;
-    console.log(filename);
+    // console.log(filename);
 
     const imageUrl = `${req.protocol}://${req.get("host")}/images/${filename}`;
     respArray.push(imageUrl);
 
-    console.log(imageUrl);
+    // console.log(imageUrl);
   }
 
   res.status(200).json({
@@ -69,11 +69,13 @@ function generateQr(req, res) {
   const message = req.query.message;
 
   try {
-    var qr_png = qr.image(message, { type: "png" });
+    const qr_png = qr.image(message, { type: "png" });
     qr_png.pipe(
       require("fs").createWriteStream(`${message.toLowerCase()}.png`),
     );
 
+    // for this one will gives us result in string (buffer for the frontend)
+    // const qr_png = qr.imageSync(message, {type: 'png'})
     // const svg_string = qr.imageSync(message, { type: "svg" });
 
     res.status(200).json({
