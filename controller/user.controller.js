@@ -1,5 +1,5 @@
 const qr = require("node-qr-image");
-const ImageKit = require("imagekit");
+const imagekit = require("../lib/imagekit");
 
 function MediaProcessingImage(req, res) {
   const imageUrl = `${req.protocol}://${req.get("host")}/images/${
@@ -48,7 +48,9 @@ function generateQr(req, res) {
 
   try {
     var qr_png = qr.image(message, { type: "png" });
-    qr_png.pipe(require('fs').createWriteStream(`${message.toLowerCase()}.png`));
+    qr_png.pipe(
+      require("fs").createWriteStream(`${message.toLowerCase()}.png`),
+    );
 
     // const svg_string = qr.imageSync(message, { type: "svg" });
 
@@ -68,9 +70,35 @@ function generateQr(req, res) {
   }
 }
 
+async function imageKitUpload(req, res) {
+  try {
+    const fileString = req.file.buffer.toString("base64");
+
+    const uploadFile = await imagekit.upload({
+      fileName: req.file.originalname,
+      file: fileString,
+    });
+
+    res.status(200).json({
+      data: uploadFile,
+      message: "success",
+      status: 200,
+      error: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      data: null,
+      message: "internal server error",
+      status: 500,
+      error: error.message,
+    });
+  }
+}
+
 module.exports = {
   MediaProcessingImage,
   MediaProcessingVideo,
   MediaProcessingFile,
-  generateQr
+  generateQr,
+  imageKitUpload
 };
